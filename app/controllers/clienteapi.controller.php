@@ -9,7 +9,7 @@ class TaskApiController {
     private $data;
 
     public function __construct() {
-        $this->model = new TaskModel();
+        $this->model = new ClienteModel();
         $this->view = new ApiView();
         
         // lee el body del request
@@ -20,44 +20,57 @@ class TaskApiController {
         return json_decode($this->data);
     }
 
-    public function getTasks($params = null) {
-        $tasks = $this->model->getAll();
-        $this->view->response($tasks);
+    public function getAllClientes($params = null) {
+        $clientes = $this->model->getAllClientes();
+        $this->view->response($clientes);
     }
 
-    public function getTask($params = null) {
+    public function getCliente($params = null) {
         // obtengo el id del arreglo de params
         $id = $params[':ID'];
-        $task = $this->model->get($id);
+        $cliente = $this->model->getCliente($id);
 
         // si no existe devuelvo 404
-        if ($task)
-            $this->view->response($task);
+        if ($cliente)
+            $this->view->response($cliente);
         else 
-            $this->view->response("La tarea con el id=$id no existe", 404);
+            $this->view->response("El cliente con el id=$id no existe", 404);
     }
 
-    public function deleteTask($params = null) {
-        $id = $params[':ID'];
+    public function insertCliente($params = null) {
+        $cliente = $this->getData();
 
-        $task = $this->model->get($id);
-        if ($task) {
-            $this->model->delete($id);
-            $this->view->response($task);
-        } else 
-            $this->view->response("La tarea con el id=$id no existe", 404);
-    }
-
-    public function insertTask($params = null) {
-        $task = $this->getData();
-
-        if (empty($task->titulo) || empty($task->descripcion) || empty($task->prioridad)) {
+        if (empty($cliente->nombre) || empty($cliente->apellido) || empty($cliente->dni)) {
             $this->view->response("Complete los datos", 400);
         } else {
-            $id = $this->model->insert($task->titulo, $task->descripcion, $task->prioridad);
-            $task = $this->model->get($id);
-            $this->view->response($task, 201);
+            $id = $this->model->insertCliente($cliente->nombre, $cliente->apellido, $cliente->dni);
+            $cliente = $this->model->getCliente($id);
+            $this->view->response($cliente, 201);
         }
+    }
+
+    public function editarCliente($params=null){
+        $id = $params[':ID'];
+        $cliente = $this->getData();
+
+        if ($cliente) {
+            $this->model->editarCliente($id, $cliente->nombre, $cliente->apellido, $cliente->dni);
+            $this->view->response("El cliente con id=$id fue modificado con exito", 200);
+        } else {
+            $this->view->response("El cliente con el id=$id no existe", 404);
+        }
+
+    }
+
+    public function deleteCliente($params = null) {
+        $id = $params[':ID'];
+
+        $cliente = $this->model->getCliente($id);
+        if ($cliente) {
+            $this->model->deleteCliente($id);
+            $this->view->response($cliente);
+        } else 
+            $this->view->response("El cliente con el id=$id no existe", 404);
     }
 
 }

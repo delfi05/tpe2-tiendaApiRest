@@ -1,20 +1,20 @@
 <?php
 
-class cliente_model {
+class ClienteModel {
     private $db;
 
     public function __construct(){
         $this->db = new PDO('mysql:host=localhost;'.'dbname=db_tienda;charset=utf8', 'root', '');
     }
  
-    public function getAllCliente() {
+    public function getAllClientes() {
         $query = $this->db->prepare("SELECT * FROM cliente");
         $query->execute(); 
         $cliente = $query->fetchAll(PDO::FETCH_OBJ);
         return $cliente;
     }
 
-    public function getClienteById($id_cliente) {
+    public function getCliente($id_cliente) {
         $query = $this->db->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
         $query->execute([$id_cliente]);
         $clienteById = $query->fetchAll(PDO::FETCH_OBJ);
@@ -38,7 +38,7 @@ class cliente_model {
         }
     }
 
-    public function deleteClienteById($id){
+    public function deleteCliente($id){
         $query= $this->db->prepare('DELETE FROM cliente WHERE id_cliente = ?');
         $query->execute([$id]);
     }
