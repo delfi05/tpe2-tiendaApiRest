@@ -10,8 +10,15 @@ class ClienteModel {
     public function getClientOrder($sort, $order) {
         $query = $this->db->prepare("SELECT * FROM `cliente` ORDER BY $sort $order");
         $query->execute(); 
-        $cliente = $query->fetchAll(PDO::FETCH_OBJ);
-        return $cliente;
+        $clienteordenado = $query->fetchAll(PDO::FETCH_OBJ);
+        return $clienteordenado;
+    }
+
+    public function pagination($limit,$offset){
+        $query = $this->db->prepare("SELECT * FROM `cliente` LIMIT $limit OFFSET $offset");
+        $query->execute(); 
+        $paginado = $query->fetchAll(PDO::FETCH_OBJ);
+        return $paginado;
     }
 
     public function getAllClient() {

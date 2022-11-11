@@ -21,28 +21,43 @@ class ClienteApiController {
     }
 
     public function getAllClient($params = null) {
-        $client = $this->model->getAllClient();
-        $this->view->response($client);
-
         $columns= ['id', 'nombre', 'apellido', 'dni'];
         
         //order asc y desc
-        if (isset($_GET['sort']) && isset ($_GET['order'])){
-            
-            $sort= $_GET['sort'];
+        if (isset($_GET['sort']) && isset($_GET['order'])){
+            $sort=$_GET['sort'];
             $order= $_GET['order'];
-
             //$columnsexist= (mb_strtolower($sort) == $columns[0] || mb_strtolower($sort) == $columns[1] || mb_strtolower($sort) == $columns[2] || mb_strtolower($sort) == $columns[3]);
             //pregunta si sort esta dentro de columns 
             $columnsexist= in_array($sort, $columns);
-            if(mb_strtolower($order) != 'asc' && mb_strtolower($order) !='desc' || !$columnsexist){ 
+            if(((mb_strtolower($order) != 'asc') && (mb_strtolower($order) !='desc')) || !$columnsexist){ 
                 $this->view->response("La columna $sort o el ordenamiento $order no existe. Las columnas disponibles son $columns[0], $columns[1], $columns[2], $columns[3]");
             }
             else{
-                $this->model->getClientOrder($sort,$order);
-                $this->view->response($client);
+                $ordenado = $this->model->getClientOrder($sort,$order);
+                $this->view->response($ordenado);
             }
         }
+        //paginacion
+        else if (isset($_GET['page']) && isset($_GET['limit'])){
+            $page = ($_GET['page']);
+            $limit = ($_GET['limit']);
+
+            if(($page == true) && ($page > 0) && ($limit > 0) && is_numeric($page) && is_numeric($limit)){
+                $offset = ($page - 1) * $limit;
+                $paginated = $this->model->pagination($limit,$offset);
+                $this->view->response($paginated);
+            }
+            else{
+                $this->view->response("La pagina $page o el limite $limit no existe, o no es un numero", 404);
+            }
+
+        }
+        else {
+            $client = $this->model->getAllClient();
+            $this->view->response($client);
+        }
+        
     }
     
 
