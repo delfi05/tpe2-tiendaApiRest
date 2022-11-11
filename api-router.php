@@ -6,10 +6,12 @@ require_once './app/controllers/clienteapi.controller.php';
 $router = new Router();
 
 // defina la tabla de ruteo
-$router->addRoute('cliente', 'GET', 'ClienteApiController', 'getCliente');
-$router->addRoute('cliente/:ID', 'GET', 'ClienteApiController', 'getCliente');
-$router->addRoute('cliente/:ID', 'DELETE', 'ClienteApiController', 'deleteCliente');
-$router->addRoute('cliente', 'POST', 'ClienteApiController', 'insertCliente'); 
+$router->addRoute('cliente', 'GET', 'ClienteApiController', 'getAllClient');
+$router->addRoute('cliente/:ID', 'GET', 'ClienteApiController', 'getClient');
+$router->addRoute('cliente', 'POST', 'ClienteApiController', 'insertClient');
+$router->addRoute('cliente/:ID', 'PUT', 'ClienteApiController', 'editClient');
+$router->addRoute('cliente/:ID', 'DELETE', 'ClienteApiController', 'deleteClient');
+ 
 
 // ejecuta la ruta (sea cual sea)
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);

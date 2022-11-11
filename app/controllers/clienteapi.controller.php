@@ -2,7 +2,7 @@
 require_once './app/models/cliente_model.php';
 require_once './app/views/api.view.php';
 
-class TaskApiController {
+class ClienteApiController {
     private $model;
     private $view;
 
@@ -20,41 +20,63 @@ class TaskApiController {
         return json_decode($this->data);
     }
 
-    public function getAllClientes($params = null) {
-        $clientes = $this->model->getAllClientes();
-        $this->view->response($clientes);
-    }
+    public function getAllClient($params = null) {
+        $client = $this->model->getAllClient();
+        $this->view->response($client);
 
-    public function getCliente($params = null) {
+        $columns= ['id', 'nombre', 'apellido', 'dni'];
+        
+        //order asc y desc
+        if (isset($_GET['sort']) && isset ($_GET['order'])){
+            
+            $sort= $_GET['sort'];
+            $order= $_GET['order'];
+
+            //$columnsexist= (mb_strtolower($sort) == $columns[0] || mb_strtolower($sort) == $columns[1] || mb_strtolower($sort) == $columns[2] || mb_strtolower($sort) == $columns[3]);
+            //pregunta si sort esta dentro de columns 
+            $columnsexist= in_array($sort, $columns);
+            if(mb_strtolower($order) != 'asc' && mb_strtolower($order) !='desc' || !$columnsexist){ 
+                $this->view->response("La columna $sort o el ordenamiento $order no existe. Las columnas disponibles son $columns[0], $columns[1], $columns[2], $columns[3]");
+            }
+            else{
+                $this->model->getClientOrder($sort,$order);
+                $this->view->response($client);
+            }
+        }
+    }
+    
+
+    public function getClient($params = null) {
         // obtengo el id del arreglo de params
         $id = $params[':ID'];
-        $cliente = $this->model->getCliente($id);
+        $client = $this->model->getClient($id);
 
         // si no existe devuelvo 404
-        if ($cliente)
-            $this->view->response($cliente);
+        if ($client)
+            $this->view->response($client);
         else 
             $this->view->response("El cliente con el id=$id no existe", 404);
     }
 
-    public function insertCliente($params = null) {
-        $cliente = $this->getData();
+    public function insertClient($params = null) {
+        $client = $this->getData();
 
-        if (empty($cliente->nombre) || empty($cliente->apellido) || empty($cliente->dni)) {
+        if (empty($client->nombre) || empty($client->apellido) || empty($client->dni)) 
             $this->view->response("Complete los datos", 400);
-        } else {
-            $id = $this->model->insertCliente($cliente->nombre, $cliente->apellido, $cliente->dni);
-            $cliente = $this->model->getCliente($id);
+        else {
+            $id = $this->model->insertClient($client->nombre, $client->apellido, $client->dni);
+            $cliente = $this->model->getClient($id);
             $this->view->response($cliente, 201);
         }
     }
 
-    public function editarCliente($params=null){
+    public function editClient($params = null){
         $id = $params[':ID'];
-        $cliente = $this->getData();
 
-        if ($cliente) {
-            $this->model->editarCliente($id, $cliente->nombre, $cliente->apellido, $cliente->dni);
+        $client = $this->getData();
+
+        if ($id) {
+            $this->model->editClient($id, $client->nombre, $client->apellido, $client->dni);
             $this->view->response("El cliente con id=$id fue modificado con exito", 200);
         } else {
             $this->view->response("El cliente con el id=$id no existe", 404);
@@ -62,13 +84,13 @@ class TaskApiController {
 
     }
 
-    public function deleteCliente($params = null) {
+    public function deleteClient($params = null) {
         $id = $params[':ID'];
+        $client = $this->model->getClient($id);
 
-        $cliente = $this->model->getCliente($id);
-        if ($cliente) {
-            $this->model->deleteCliente($id);
-            $this->view->response($cliente);
+        if ($client) {
+            $this->model->deleteClient($id);
+            $this->view->response("El cliente con id=$id fue eliminado con exito", 200);
         } else 
             $this->view->response("El cliente con el id=$id no existe", 404);
     }
