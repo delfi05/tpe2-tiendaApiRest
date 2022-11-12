@@ -83,4 +83,11 @@ class ClienteModel {
         $query= $this->db->prepare('DELETE FROM cliente WHERE id_cliente = ?');
         $query->execute([$id]);
     }
+    
+    public function getNameClients(){
+        $query = $this->db->prepare("SELECT nombre FROM cliente");
+        $query->execute();
+        $nameclient = $query->fetchAll(PDO::FETCH_OBJ);
+        return $nameclient;
+    }
 }

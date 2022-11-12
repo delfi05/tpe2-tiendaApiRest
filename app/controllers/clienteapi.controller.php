@@ -21,7 +21,8 @@ class ClienteApiController {
     }
 
     public function getAllClient($params = null) {
-        
+        $columns= ['id', 'nombre', 'apellido', 'dni'];
+
         if (isset($_GET['filtername'])){
             $filtername = mb_strtolower($_GET['filtername']);
         }else{
@@ -54,6 +55,7 @@ class ClienteApiController {
     /*public function getAllClient($params = null) {
         $columns= ['id', 'nombre', 'apellido', 'dni'];
         $client = $this->model->getAllClient();
+        
         //filtrado
         if (isset($_GET['filtername'])){
             $filtername = mb_strtolower($_GET['filtername']);
