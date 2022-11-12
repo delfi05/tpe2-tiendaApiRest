@@ -21,6 +21,37 @@ class ClienteApiController {
     }
 
     public function getAllClient($params = null) {
+        
+        if (isset($_GET['filtername'])){
+            $filtername = mb_strtolower($_GET['filtername']);
+        }else{
+            $filtername = null;
+        }
+
+        if (isset($_GET['sort']) && (isset($_GET['order']))){
+            $sort = ($_GET['sort']);
+            $order = ($_GET['order']);
+        }else{
+            $sort = null;
+            $order = null;
+        }
+        
+        if(isset($_GET['page']) && (isset($_GET['limit']))){
+            $page = intval($_GET['page']);
+            $limit = intval($_GET['limit']);
+            $offset = ($limit * $page) - $limit;
+        }else{
+            $offset = null;
+            $limit = null;
+        }
+
+        $result = $this->model->getAllClient($filtername, $sort, $order, $limit, $offset);
+        $this->view->response($result);
+    }
+
+
+
+    /*public function getAllClient($params = null) {
         $columns= ['id', 'nombre', 'apellido', 'dni'];
         $client = $this->model->getAllClient();
         //filtrado
@@ -70,7 +101,7 @@ class ClienteApiController {
 
             //$client = $this->model->getAllClient();
         $this->view->response($client);
-    }
+    }*/
 
     public function getClient($params = null) {
         // obtengo el id del arreglo de params

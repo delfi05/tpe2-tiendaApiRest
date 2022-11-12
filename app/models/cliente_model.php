@@ -7,7 +7,27 @@ class ClienteModel {
         $this->db = new PDO('mysql:host=localhost;'.'dbname=db_tienda;charset=utf8', 'root', '');
     }
     
-    public function getClientOrder($sort, $order) {
+    public function getAllClient($filtername, $sort, $order, $limit, $offset){
+        $consultation = "SELECT * FROM cliente";
+
+        if (isset($filtername)){
+            $consultation .= " WHERE nombre LIKE '%$filtername%'";
+        }
+        if ((isset($sort)) && (isset($order))){
+            $consultation .= " ORDER BY $sort $order";
+        }
+        if(isset($limit)){
+            $consultation .= " LIMIT $limit OFFSET $offset";
+        }
+
+        $query = $this->db->prepare($consultation);
+        $query->execute();
+        $clients = $query->fetchAll(PDO:: FETCH_OBJ);
+        return $clients;
+    }
+
+
+    /* public function getClientOrder($sort, $order) {
         $query = $this->db->prepare("SELECT * FROM `cliente` ORDER BY $sort $order");
         $query->execute(); 
         $clienteordenado = $query->fetchAll(PDO::FETCH_OBJ);
@@ -34,7 +54,7 @@ class ClienteModel {
         $cliente = $query->fetchAll(PDO::FETCH_OBJ);
         return $cliente;
     }
-
+*/
     public function getClient($id_cliente) {
         $query = $this->db->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
         $query->execute([$id_cliente]);
