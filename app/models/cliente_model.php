@@ -14,6 +14,13 @@ class ClienteModel {
         return $clienteordenado;
     }
 
+    public function getClientFiltrado($filtername) {
+        $query = $this->db->prepare("SELECT * FROM `cliente` WHERE `nombre` LIKE '%$filtername%'");
+        $query->execute(); 
+        $filtrado = $query->fetchAll(PDO::FETCH_OBJ);
+        return $filtrado;
+    }
+
     public function pagination($limit,$offset){
         $query = $this->db->prepare("SELECT * FROM `cliente` LIMIT $limit OFFSET $offset");
         $query->execute(); 

@@ -53,11 +53,21 @@ class ClienteApiController {
             }
 
         }
+        //filtrado
+        else if (isset($_GET['filtername'])){
+            $filtername = mb_strtolower($_GET['filtername']);
+            $name = $this->model->getClientFiltrado($filtername); 
+            if(!$name){
+                $this->view->response("No existe el campo que contenga $filtername",404);
+            }else{
+                $filtrado= $this->model->getClientFiltrado($filtername);
+                $this->view->response($filtrado);
+            }
+        }
         else {
             $client = $this->model->getAllClient();
             $this->view->response($client);
         }
-        
     }
     
 
