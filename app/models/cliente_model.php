@@ -80,7 +80,7 @@ class ClienteModel {
     }
 
     public function deleteClient($id){
-        $query= $this->db->prepare('DELETE FROM cliente WHERE id_cliente = ?');
+        $query = $this->db->prepare('DELETE FROM cliente WHERE id_cliente = ?');
         $query->execute([$id]);
     }
     
