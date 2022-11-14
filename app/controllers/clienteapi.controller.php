@@ -21,9 +21,8 @@ class ClienteApiController {
     }
 
     public function getAllClient($params = null) {
-        $columns= ['id', 'nombre', 'apellido', 'dni'];
-
-        if (isset($_GET['filtername'])){
+        //$columns= ['id', 'nombre', 'apellido', 'dni'];
+       if (isset($_GET['filtername'])){
             $filtername = mb_strtolower($_GET['filtername']);
         }else{
             $filtername = null;
@@ -45,9 +44,13 @@ class ClienteApiController {
             $offset = null;
             $limit = null;
         }
-
+        
         $result = $this->model->getAllClient($filtername, $sort, $order, $limit, $offset);
-        $this->view->response($result);
+        if (count($result)>0){
+            $this->view->response($result);
+        }else{
+            $this->view->response("no hay se encuentra cliente/s con esa/s condicion/es",404);
+        }
     }
 
 
@@ -131,10 +134,10 @@ class ClienteApiController {
 
     public function editClient($params = null){
         $id = $params[':ID'];
-
         $client = $this->getData();
-
-        if ($id) {
+        $clientid = $this->model->getclient($id);
+        
+        if ($clientid) {
             $this->model->editClient($id, $client->nombre, $client->apellido, $client->dni);
             $this->view->response("El cliente con id=$id fue modificado con exito", 200);
         } else {
