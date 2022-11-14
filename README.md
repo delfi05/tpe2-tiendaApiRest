@@ -19,7 +19,7 @@ Ejemplos de uso:
 
     [DELETE]-> .../api/cliente/2 (elimina el cliente con id 2) 
 
-    FORMATO POST/PUT: Para hacer una inserción (POST) o una edición (PUT), se deben ingresar los datos a como se muestran a continuación.
+    FORMATO [POST/PUT]: Para hacer una inserción (POST) o una edición (PUT), se deben ingresar los datos a como se muestran a continuación.
             {
                 nombre: "Delfina",
                 apellido: "Ferreyra",

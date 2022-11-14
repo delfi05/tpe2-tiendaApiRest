@@ -2,33 +2,31 @@
 require_once './app/models/cliente_model.php';
 require_once './app/views/api.view.php';
 
-class ClienteApiController {
+class ClienteApiController{
     private $model;
     private $view;
-
     private $data;
 
-    public function __construct() {
+    public function __construct(){
         $this->model = new ClienteModel();
         $this->view = new ApiView();
-        
         // lee el body del request
         $this->data = file_get_contents("php://input");
     }
 
-    private function getData() {
+    private function getData(){
         return json_decode($this->data);
     }
 
-    public function getAllClient($params = null) {
-        //$columns= ['id', 'nombre', 'apellido', 'dni'];
-       if (isset($_GET['filtername'])){
+    public function getAllClient($params = null){
+    //$columns= ['id', 'nombre', 'apellido', 'dni'];    
+        if(isset($_GET['filtername'])){
             $filtername = mb_strtolower($_GET['filtername']);
         }else{
             $filtername = null;
         }
 
-        if (isset($_GET['sort']) && (isset($_GET['order']))){
+        if(isset($_GET['sort']) && (isset($_GET['order']))){
             $sort = ($_GET['sort']);
             $order = ($_GET['order']);
         }else{
@@ -46,33 +44,33 @@ class ClienteApiController {
         }
         
         $result = $this->model->getAllClient($filtername, $sort, $order, $limit, $offset);
-        if (count($result)>0){
+        if(count($result)>0){
             $this->view->response($result);
         }else{
-            $this->view->response("no hay se encuentra cliente/s con esa/s condicion/es",404);
+            $this->view->response("El servidor no pudo interpretar la solicitud dada una sintaxis invalida",404);
         }
     }
 
-    public function getClient($params = null) {
+    public function getClient($params = null){
         // obtengo el id del arreglo de params
         $id = $params[':ID'];
         $client = $this->model->getClient($id);
 
         // si no existe devuelvo 404
-        if ($client)
+        if($client)
             $this->view->response($client, 200);
         else 
             $this->view->response("El cliente con el id=$id no existe", 404);
     }
 
-    public function insertClient($params = null) {
+    public function insertClient($params = null){
         $client = $this->getData();
 
-        if (!empty($client->nombre) && !empty($client->apellido) && !empty($client->dni)) {
+        if(!empty($client->nombre) && !empty($client->apellido) && !empty($client->dni)){
             $id = $this->model->insertClient($client->nombre, $client->apellido, $client->dni);
             $cliente = $this->model->getClient($id);
             $this->view->response($cliente, 201);
-        }else {
+        }else{
             $this->view->response("Complete los datos", 400);
         }
     }
@@ -82,23 +80,23 @@ class ClienteApiController {
         $client = $this->getData();
         $clientid = $this->model->getclient($id);
         
-        if ($clientid) {
+        if($clientid){
             $this->model->editClient($id, $client->nombre, $client->apellido, $client->dni);
             $this->view->response("El cliente con id=$id fue modificado con exito", 200);
-        } else {
+        }else{
             $this->view->response("El cliente con el id=$id no existe", 404);
         }
 
     }
 
-    public function deleteClient($params = null) {
+    public function deleteClient($params = null){
         $id = $params[':ID'];
         $client = $this->model->getClient($id);
 
-        if ($client) {
+        if($client){
             $this->model->deleteClient($id);
             $this->view->response("El cliente con id=$id fue eliminado con exito", 200);
-        } else 
+        }else 
             $this->view->response("El cliente con el id=$id no existe", 404);
     }
 

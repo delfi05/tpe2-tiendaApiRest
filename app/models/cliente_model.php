@@ -10,10 +10,10 @@ class ClienteModel {
     public function getAllClient($filtername, $sort, $order, $limit, $offset){
         $consultation = "SELECT * FROM cliente";
 
-        if (isset($filtername)){
+        if(isset($filtername)){
             $consultation .= " WHERE nombre LIKE '%$filtername%'";
         }
-        if ((isset($sort)) && (isset($order))){
+        if((isset($sort)) && (isset($order))){
             $consultation .= " ORDER BY $sort $order";
         }
         if(isset($limit)){
@@ -55,14 +55,14 @@ class ClienteModel {
         return $cliente;
     }
 */
-    public function getClient($id_cliente) {
+    public function getClient($id_cliente){
         $query = $this->db->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
         $query->execute([$id_cliente]);
         $clienteById = $query->fetchAll(PDO::FETCH_OBJ);
         return $clienteById;
     }
 
-    public function insertClient($nombre, $apellido, $dni) {
+    public function insertClient($nombre, $apellido, $dni){
         $query= $this->db->prepare("INSERT INTO cliente (nombre, apellido, dni) VALUES (?, ?, ?)");
         $query->execute([$nombre, $apellido, $dni]);
         return $this-> db->lastInsertId();
