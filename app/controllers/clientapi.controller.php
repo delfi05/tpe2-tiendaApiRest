@@ -22,7 +22,6 @@ class ClientApiController{
         
         //filtrado por nombre
         if(!empty($_GET['filtername'])){
-            $code['filter']= -1;
             $filtername = mb_strtolower($_GET['filtername']);
         }else{
             $filtername = null;
@@ -30,12 +29,13 @@ class ClientApiController{
 
         //ordenado asc y desc
         if(!empty($_GET['sort']) && (!empty($_GET['order']))){
+            $columns = array('id_cliente', 'nombre', 'apellido', 'dni');
             $sort = ($_GET['sort']);
             $order = ($_GET['order']);
 
-            if ($this->model->validateFieldOrder($sort, $order) != 0){
+            if (!(in_array($sort, $columns)) || ($order != 'asc') && ($order != 'desc')){
                 return $this->view->response("El campo de orden o el tipo de orden son invalidos",400);
-            }    
+            }
         }else{
             $sort = null;
             $order = null;
@@ -43,7 +43,6 @@ class ClientApiController{
 
         //paginado
         if(!empty($_GET['page']) && (!empty($_GET['limit']))){
-            $code['paginated']= -4;
             $page = intval($_GET['page']);
             $limit = intval($_GET['limit']);
             $offset = ($limit * $page) - $limit;

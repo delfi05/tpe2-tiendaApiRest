@@ -26,7 +26,7 @@ class ClientModel {
         return $clients;
     }
 
-    public function validateFieldOrder($sort, $order){
+    /*public function validateFieldOrder($sort, $order){
         if(($sort != 'id_cliente') && ($sort != 'nombre') && ($sort != 'apellido') && ($sort != 'dni')){
             return -2;
         }
@@ -34,7 +34,7 @@ class ClientModel {
             return -3;
         }
         return 0;
-    }
+    }*/
 
     public function getClient($id_cliente){
         $query = $this->db->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
