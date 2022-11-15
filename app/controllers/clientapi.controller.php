@@ -1,14 +1,14 @@
 <?php
-require_once './app/models/cliente_model.php';
+require_once './app/models/client_model.php';
 require_once './app/views/api.view.php';
 
-class ClienteApiController{
+class ClientApiController{
     private $model;
     private $view;
     private $data;
 
     public function __construct(){
-        $this->model = new ClienteModel();
+        $this->model = new ClientModel();
         $this->view = new ApiView();
         // lee el body del request
         $this->data = file_get_contents("php://input");

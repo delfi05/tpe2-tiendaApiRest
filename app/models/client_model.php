@@ -1,6 +1,6 @@
 <?php
 
-class ClienteModel {
+class ClientModel {
     private $db;
 
     public function __construct(){
