@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2022 a las 03:00:26
+-- Tiempo de generación: 16-11-2022 a las 00:12:49
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -58,7 +58,12 @@ INSERT INTO `cliente` (`id_cliente`, `nombre`, `apellido`, `dni`) VALUES
 (22, 'Juana', 'Ferreyra', 40157895),
 (23, 'Juana', 'Ferreyra', 40157895),
 (24, 'Luisa', 'Martinez', 40157895),
-(25, 'Luisa', 'Martinez', 40157895);
+(25, 'Luisa', 'Martinez', 40157895),
+(26, 'Martin', 'Avellaneda', 44332243),
+(27, 'Lucas', 'Di Cesare', 42773616),
+(28, 'Isabella', 'Rodriguez', 42347895),
+(29, 'Maria', 'Canelas', 12933845),
+(30, 'Claudia', 'Caballero', 16924437);
 
 -- --------------------------------------------------------
 
@@ -138,7 +143,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`

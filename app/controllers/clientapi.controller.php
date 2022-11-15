@@ -34,7 +34,7 @@ class ClientApiController{
             $order = ($_GET['order']);
 
             if (!(in_array($sort, $columns)) || ($order != 'asc') && ($order != 'desc')){
-                return $this->view->response("El campo de orden o el tipo de orden son invalidos",400);
+                return $this->view->response("El campo o el tipo de orden son invalidos",400);
             }
         }else{
             $sort = null;
