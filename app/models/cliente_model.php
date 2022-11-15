@@ -26,7 +26,7 @@ class ClienteModel {
         return $clients;
     }
 
-    public function ValidateCampOrder($sort, $order){
+    public function validateFieldOrder($sort, $order){
         if(($sort != 'id_cliente') && ($sort != 'nombre') && ($sort != 'apellido') && ($sort != 'dni')){
             return -2;
         }
@@ -36,35 +36,6 @@ class ClienteModel {
         return 0;
     }
 
-
-    /* public function getClientOrder($sort, $order) {
-        $query = $this->db->prepare("SELECT * FROM `cliente` ORDER BY $sort $order");
-        $query->execute(); 
-        $clienteordenado = $query->fetchAll(PDO::FETCH_OBJ);
-        return $clienteordenado;
-    }
-
-    public function getClientFiltrado($filtername) {
-        $query = $this->db->prepare("SELECT * FROM `cliente` WHERE `nombre` LIKE '%$filtername%'");
-        $query->execute(); 
-        $filtrado = $query->fetchAll(PDO::FETCH_OBJ);
-        return $filtrado;
-    }
-
-    public function pagination($limit,$offset){
-        $query = $this->db->prepare("SELECT * FROM `cliente` LIMIT $limit OFFSET $offset");
-        $query->execute(); 
-        $paginado = $query->fetchAll(PDO::FETCH_OBJ);
-        return $paginado;
-    }
-
-    public function getAllClient() {
-        $query = $this->db->prepare("SELECT * FROM cliente");
-        $query->execute(); 
-        $cliente = $query->fetchAll(PDO::FETCH_OBJ);
-        return $cliente;
-    }
-*/
     public function getClient($id_cliente){
         $query = $this->db->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
         $query->execute([$id_cliente]);
@@ -94,10 +65,4 @@ class ClienteModel {
         $query->execute([$id]);
     }
     
-    // public function getNameClients(){
-    //     $query = $this->db->prepare("SELECT nombre FROM cliente");
-    //     $query->execute();
-    //     $nameclient = $query->fetchAll(PDO::FETCH_OBJ);
-    //     return $nameclient;
-    // }
 }

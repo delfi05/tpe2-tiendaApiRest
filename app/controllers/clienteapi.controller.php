@@ -19,7 +19,7 @@ class ClienteApiController{
     }
 
     public function getAllClient($params = null){ 
-
+        
         //filtrado por nombre
         if(!empty($_GET['filtername'])){
             $code['filter']= -1;
@@ -27,19 +27,20 @@ class ClienteApiController{
         }else{
             $filtername = null;
         }
+
         //ordenado asc y desc
         if(!empty($_GET['sort']) && (!empty($_GET['order']))){
             $sort = ($_GET['sort']);
             $order = ($_GET['order']);
 
-            if ($this->model->ValidateCampOrder($sort, $order) != 0){
+            if ($this->model->validateFieldOrder($sort, $order) != 0){
                 return $this->view->response("El campo de orden o el tipo de orden son invalidos",400);
-            }
-            
+            }    
         }else{
             $sort = null;
             $order = null;
         }
+        
         //paginado
         if(!empty($_GET['page']) && (!empty($_GET['limit']))){
             $code['paginated']= -4;
@@ -56,14 +57,13 @@ class ClienteApiController{
         
         $result = $this->model->getAllClient($filtername, $sort, $order, $limit, $offset);
         if(count($result)>0){
-            $this->view->response($result);
+            $this->view->response($result, 200);
         }else{
             $this->view->response("No se encontro usuario con ese nombre o ese numero de pagina",404);
         }
     }
 
     public function getClient($params = null){
-        // obtengo el id del arreglo de params
         $id = $params[':ID'];
         $client = $this->model->getClient($id);
 
@@ -82,7 +82,7 @@ class ClienteApiController{
             $cliente = $this->model->getClient($id);
             $this->view->response($cliente, 201);
         }else{
-            $this->view->response("Complete los datos", 400); //acomodar
+            $this->view->response("Hay campos que se encuentran incompletos", 400); 
         }
     }
 
@@ -97,7 +97,6 @@ class ClienteApiController{
         }else{
             $this->view->response("El cliente con el id=$id no existe", 404);
         }
-
     }
 
     public function deleteClient($params = null){
@@ -110,117 +109,4 @@ class ClienteApiController{
         }else 
             $this->view->response("El cliente con el id=$id no existe", 404);
     }
-
 }
-
-/*public function getAllClient($params = null) {
-        $columns= ['id', 'nombre', 'apellido', 'dni'];
-        $response= [];
-        //filtrado
-        else if (isset($_GET['filtername'])){
-            $filtername = mb_strtolower($_GET['filtername']);
-            $name = $this->model->getClientFiltrado($filtername); 
-            if(!$name){
-                $this->view->response("No existe el campo que contenga $filtername",404);
-            }else{
-                $response= $this->model->getClientFiltrado($filtername);
-                //$this->view->response($filtrado);
-            }
-        }
-        //order asc y desc
-        if (isset($_GET['sort']) && isset($_GET['order'])){
-            $sort=$_GET['sort'];
-            $order= $_GET['order'];
-            //$columnsexist= (mb_strtolower($sort) == $columns[0] || mb_strtolower($sort) == $columns[1] || mb_strtolower($sort) == $columns[2] || mb_strtolower($sort) == $columns[3]);
-            //pregunta si sort esta dentro de columns 
-            $columnsexist= in_array($sort, $columns);
-            if(((mb_strtolower($order) != 'asc') && (mb_strtolower($order) !='desc')) || !$columnsexist){ 
-                $this->view->response("La columna $sort o el ordenamiento $order no existe. Las columnas disponibles son $columns[0], $columns[1], $columns[2], $columns[3]");
-            }
-            else{
-                $response = $this->model->getClientOrder($sort,$order);
-                //$this->view->response($ordenado);
-            }
-        }
-        //paginacion
-        else if (isset($_GET['page']) && isset($_GET['limit'])){
-            $page = ($_GET['page']);
-            $limit = ($_GET['limit']);
-
-            if(($page == true) && ($page > 0) && ($limit > 0) && is_numeric($page) && is_numeric($limit)){
-                $offset = ($page - 1) * $limit;
-                //$response = $this->model->pagination($limit,$offset);
-                $this->view->response($paginated);
-            }
-            else{
-                $this->view->response("La pagina $page o el limite $limit no existe, o no es un numero", 404);
-            }
-
-        }
-
-        else {
-            if (response.lenght<1){
-                $client = $this->model->getAllClient();
-                $this->view->response($client);
-                 }else{
-                $this->view->response($response);
-            }
-        }
-    }
-*/
-
-
-
-
-    /*public function getAllClient($params = null) {
-        $columns= ['id', 'nombre', 'apellido', 'dni'];
-        $client = $this->model->getAllClient();
-        
-        //filtrado
-        if (isset($_GET['filtername'])){
-            $filtername = mb_strtolower($_GET['filtername']);
-            $name = $this->model->getClientFiltrado($filtername); 
-            if(!$name){
-                $this->view->response("No existe el campo que contenga $filtername",404);
-            }else{
-                $filtrado= $this->model->getClientFiltrado($filtername);
-                $client= array_intersect($client,$filtrado);
-                //$this->view->response($filtrado);
-            }
-        }
-        //order asc y desc
-        if (isset($_GET['sort']) && isset($_GET['order'])){
-            $sort=$_GET['sort'];
-            $order= $_GET['order'];
-            //$columnsexist= (mb_strtolower($sort) == $columns[0] || mb_strtolower($sort) == $columns[1] || mb_strtolower($sort) == $columns[2] || mb_strtolower($sort) == $columns[3]);
-            //pregunta si sort esta dentro de columns 
-            $columnsexist= in_array($sort, $columns);
-            if(((mb_strtolower($order) != 'asc') && (mb_strtolower($order) !='desc')) || !$columnsexist){ 
-                $this->view->response("La columna $sort o el ordenamiento $order no existe. Las columnas disponibles son $columns[0], $columns[1], $columns[2], $columns[3]");
-            }
-            else{
-                $ordenado = $this->model->getClientOrder($sort,$order);
-                $client= array_intersect($client,$ordenado);
-            }
-        }
-        //paginacion
-        if (isset($_GET['page']) && isset($_GET['limit'])){
-            $page = ($_GET['page']);
-            $limit = ($_GET['limit']);
-
-            if(($page == true) && ($page > 0) && ($limit > 0) && is_numeric($page) && is_numeric($limit)){
-                $offset = ($page - 1) * $limit;
-                $paginated = $this->model->pagination($limit,$offset);
-                $client= array_intersect($client,$paginated);
-                
-                //$this->view->response($paginated);
-            }
-            else{
-                $this->view->response("La pagina $page o el limite $limit no existe, o no es un numero", 404);
-            }
-
-        }
-
-            //$client = $this->model->getAllClient();
-        $this->view->response($client);
-    }*/
