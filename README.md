@@ -15,11 +15,11 @@ Ejemplos de uso:
 
     [POST]-> .../api/cliente/ (lee el contenido del body y agrega un nuevo cliente)
 
-    [PUT]-> .../api/cliente/11 (lle el contenido del body y edita el cliente)
+    [PUT]-> .../api/cliente/11 (lee el contenido del body y edita el cliente)
 
     [DELETE]-> .../api/cliente/2 (elimina el cliente con id 2) 
 
-    FORMATO [POST/PUT]: Para hacer una inserción (POST) o una edición (PUT), se deben ingresar los datos a como se muestran a continuación.
+    FORMATO [POST/PUT]: Para hacer una inserción (POST) o una edición (PUT), se deben ingresar los datos en formato JSON como se muestran a continuación.
             {
                 nombre: "Delfina",
                 apellido: "Ferreyra",
@@ -28,7 +28,8 @@ Ejemplos de uso:
 
 Otras herramientas:
 FILTRAR Y ORDENAR CONTENIDO
-   - ASCENDENTEMENTE -> .../cliente?sort=nombre&order=asc (ordena los clientes ascendentemente)
-   - DESCENDENTEMENTE -> .../cliente?sort=nombre&order=desc (ordena los clientes descendentemente)
+   - ASCENDENTE -> .../cliente?sort=nombre&order=asc (ordena los clientes ascendentemente)
+   - DESCENDENTE -> .../cliente?sort=nombre&order=desc (ordena los clientes descendentemente)
    - FILTRADO DE NOMBRE -> .../cliente?filtername=delfina (filtra los nombres de los clientes y solo deja las columnas que tengan el nombre delfina)
    - PAGINACIÓN -> .../cliente?page=1&limit=2 (divide a los clientes en paginas, y ademas limita cuandos elementos ver en cada una)
+

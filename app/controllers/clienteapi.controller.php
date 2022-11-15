@@ -18,26 +18,37 @@ class ClienteApiController{
         return json_decode($this->data);
     }
 
-    public function getAllClient($params = null){
-    //$columns= ['id', 'nombre', 'apellido', 'dni'];    
-        if(isset($_GET['filtername'])){
+    public function getAllClient($params = null){ 
+
+        //filtrado por nombre
+        if(!empty($_GET['filtername'])){
+            $code['filter']= -1;
             $filtername = mb_strtolower($_GET['filtername']);
         }else{
             $filtername = null;
         }
-
-        if(isset($_GET['sort']) && (isset($_GET['order']))){
+        //ordenado asc y desc
+        if(!empty($_GET['sort']) && (!empty($_GET['order']))){
             $sort = ($_GET['sort']);
             $order = ($_GET['order']);
+
+            if ($this->model->ValidateCampOrder($sort, $order) != 0){
+                return $this->view->response("El campo de orden o el tipo de orden son invalidos",400);
+            }
+            
         }else{
             $sort = null;
             $order = null;
         }
-        
-        if(isset($_GET['page']) && (isset($_GET['limit']))){
+        //paginado
+        if(!empty($_GET['page']) && (!empty($_GET['limit']))){
+            $code['paginated']= -4;
             $page = intval($_GET['page']);
             $limit = intval($_GET['limit']);
             $offset = ($limit * $page) - $limit;
+            if(($page<=0) || ($limit<=0)){
+                return $this->view->response("La pagina y el limite tienen que ser mayor a cero",400); 
+            }
         }else{
             $offset = null;
             $limit = null;
@@ -47,7 +58,7 @@ class ClienteApiController{
         if(count($result)>0){
             $this->view->response($result);
         }else{
-            $this->view->response("El servidor no pudo interpretar la solicitud dada una sintaxis invalida",404);
+            $this->view->response("No se encontro usuario con ese nombre o ese numero de pagina",404);
         }
     }
 
@@ -71,7 +82,7 @@ class ClienteApiController{
             $cliente = $this->model->getClient($id);
             $this->view->response($cliente, 201);
         }else{
-            $this->view->response("Complete los datos", 400);
+            $this->view->response("Complete los datos", 400); //acomodar
         }
     }
 
