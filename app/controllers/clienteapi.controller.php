@@ -40,15 +40,15 @@ class ClienteApiController{
             $sort = null;
             $order = null;
         }
-        
+
         //paginado
         if(!empty($_GET['page']) && (!empty($_GET['limit']))){
             $code['paginated']= -4;
             $page = intval($_GET['page']);
             $limit = intval($_GET['limit']);
             $offset = ($limit * $page) - $limit;
-            if(($page<=0) || ($limit<=0)){
-                return $this->view->response("La pagina y el limite tienen que ser mayor a cero",400); 
+            if(($page<=0) || ($limit<=0) || (!is_numeric($page)) || (!is_numeric($limit))){
+                return $this->view->response("La pagina y el limite tienen que se un numero que sea mayor a cero",400); 
             }
         }else{
             $offset = null;
