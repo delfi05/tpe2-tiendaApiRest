@@ -1,7 +1,7 @@
 ## API REST para el recurso de TIENDA
 
 ## Importar la base de datos
-- importar desde PHPMyAdmin (o cualquiera) database/db_tienda.php
+- importar desde PHPMyAdmin (o cualquiera) database/db_tienda.sql
 
 
 ## Pueba con postman
