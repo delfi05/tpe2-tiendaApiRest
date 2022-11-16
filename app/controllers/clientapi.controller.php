@@ -66,7 +66,6 @@ class ClientApiController{
         $id = $params[':ID'];
         $client = $this->model->getClient($id);
 
-        // si no existe devuelvo 404
         if($client)
             $this->view->response($client, 200);
         else 

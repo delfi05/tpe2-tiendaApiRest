@@ -26,16 +26,6 @@ class ClientModel {
         return $clients;
     }
 
-    /*public function validateFieldOrder($sort, $order){
-        if(($sort != 'id_cliente') && ($sort != 'nombre') && ($sort != 'apellido') && ($sort != 'dni')){
-            return -2;
-        }
-        if(($order != 'asc') && ($order != 'desc')){
-            return -3;
-        }
-        return 0;
-    }*/
-
     public function getClient($id_cliente){
         $query = $this->db->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
         $query->execute([$id_cliente]);
@@ -64,5 +54,4 @@ class ClientModel {
         $query = $this->db->prepare('DELETE FROM cliente WHERE id_cliente = ?');
         $query->execute([$id]);
     }
-    
 }
